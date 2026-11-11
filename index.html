@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ecomi — know what every product actually earns</title>
+<meta name="description" content="Ecomi joins your Shopify orders to your Google Ads spend, takes off your cost of goods, and gives every product one verdict: keep it, stop it, or leave it alone. For Shopify shops advertising on Google.">
+<link rel="canonical" href="https://ecomi.app/">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ecomi.app/">
+<meta property="og:site_name" content="Ecomi">
+<meta property="og:title" content="Ecomi — know what every product actually earns">
+<meta property="og:description" content="Shopify orders joined to Google Ads spend, with your cost of goods taken off. One verdict per product, counted since the day it launched.">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230A0A0A'/%3E%3Cpath d='M5 16.5l4.5-4.5 3 3L19 7.5' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;550;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="ui.css">
+<style>
+  /* The homepage's own few rules. Everything else comes from the product's
+     tokens and components. */
+  .hero {
+    padding-block: clamp(var(--space-12), 8vw, 6rem) var(--space-10);
+    text-align: center;
+  }
+
+  .hero__in {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .hero .d1 {
+    max-width: 17ch;
+  }
+
+  .hero .lede {
+    max-width: 52ch;
+  }
+
+  .hero__shot {
+    width: 100%;
+    margin-top: var(--space-8);
+  }
+
+  .verdicts {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .verdicts div {
+    font-size: var(--body);
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  .verdicts b {
+    color: var(--text-primary);
+    font-weight: 550;
+  }
+
+  .start {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-4);
+  }
+
+  @media (max-width: 54rem) {
+    .start {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .start__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    border-radius: var(--radius-2xl);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .start__card p {
+    font-size: var(--body);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* What the product does not do, said plainly. It is the part a careful
+     buyer looks for, and the part a reviewer has to find. */
+  .never {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(var(--space-6), 4vw, var(--space-12));
+    align-items: start;
+  }
+
+  @media (max-width: 62rem) {
+    .never {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  .never__list {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .never__row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .never__row:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .never__row h3 {
+    font-size: var(--d4);
+    font-weight: 600;
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .never__row p {
+    margin-top: var(--space-1);
+    font-size: var(--body);
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .never__mark {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: .125rem;
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-secondary);
+  }
+
+  .never__mark svg {
+    width: .8125rem;
+    height: .8125rem;
+  }
+
+  .close__in {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding: clamp(var(--space-10), 6vw, var(--space-16)) var(--space-6);
+    border-radius: var(--radius-2xl);
+    background: var(--ink-900);
+    color: var(--ink-text);
+    text-align: center;
+  }
+
+  .close__in .d2 {
+    color: var(--ink-text-loud);
+    max-width: 20ch;
+  }
+
+  .close__in .lede {
+    color: var(--ink-text-dim);
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="top"></div>
+
+<header class="topbar">
+  <div class="wrap topbar__in">
+    <a class="brand" href="/">
+      <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/></svg></span>
+      <span>Ecomi</span>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#products">Products</a>
+      <a href="#insights">Insights</a>
+      <a href="#radar">Market radar</a>
+      <a href="#start">How it works</a>
+      <a href="#questions">Questions</a>
+    </nav>
+    <a class="btn btn--primary btn--round" href="https://app.ecomi.app/login">Sign in</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap hero__in">
+      <span class="chip" data-reveal><span class="chip__dot"></span>Shopify &middot; Google Ads &middot; read-only</span>
+      <h1 class="d1" data-reveal style="--delay:60ms">Know what every product actually earns</h1>
+      <p class="lede" data-reveal style="--delay:120ms">
+        Ecomi joins your Shopify orders to your Google Ads spend, takes off
+        your cost of goods, and gives every product one verdict.
+      </p>
+      <div class="acts acts--centre" data-reveal style="--delay:180ms">
+        <a class="btn btn--primary btn--xl btn--round" href="https://app.ecomi.app/login">Sign in to Ecomi</a>
+        <a class="btn btn--secondary btn--xl btn--round" href="#products">See the screens</a>
+      </div>
+      <p class="muted-note" data-reveal style="--delay:220ms">
+        Connect once. Nothing in your ad account is ever changed.
+      </p>
+      <div class="hero__shot" id="hero-shot" data-reveal style="--delay:260ms"></div>
+    </div>
+  </section>
+
+  <div id="strip"></div>
+
+  <!-- PRODUCTS ............................................................ -->
+  <section class="sec" id="products">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="label">Products</span>
+        <h2 class="d2">Which products are paying for themselves</h2>
+        <p class="lede">
+          Every figure is the product's whole life, not a window. One verdict
+          per row, and thirteen columns behind it for when you want to argue.
+        </p>
+      </div>
+
+      <div class="bento" style="--cols:3">
+        <article class="tile span-2" data-reveal>
+          <div class="tile__demo" id="p-table"></div>
+          <div class="tile__words">
+            <span class="tile__kicker">The table</span>
+            <h3 class="d3">Spend, sold and profit since the day it launched</h3>
+            <p>
+              Google reports on campaigns; your shop reports on orders. Ecomi
+              puts the two on the same row, takes off the cost of goods, and
+              leaves one number that is actually yours to keep.
+            </p>
+          </div>
+        </article>
+
+        <article class="tile" data-reveal style="--delay:80ms">
+          <div class="tile__demo" id="p-rows"></div>
+          <div class="tile__words">
+            <span class="tile__kicker">The verdict</span>
+            <h3 class="d3">Read the left column, ignore the rest</h3>
+            <div class="verdicts">
+              <div><b>Stop</b> &mdash; past your line, nothing sold.</div>
+              <div><b>Never shown</b> &mdash; Google has never charged for it.</div>
+              <div><b>Too early</b> &mdash; spending, not a fortnight old.</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS ............................................................ -->
+  <section class="sec sec--tint" id="insights">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="label">Insights</span>
+        <h2 class="d2">What to import next, and at what price</h2>
+        <p class="lede">
+          Products answers which one. These panels answer which sort &mdash;
+          the question that decides tomorrow's fifteen imports.
+        </p>
+      </div>
+
+      <div class="bento" style="--cols:3">
+        <article class="tile tile--white" data-reveal>
+          <div id="i-0"></div>
+          <div class="tile__words">
+            <h3 class="d3">Import more of what already sells</h3>
+            <p>Spend, units and ROAS per category. The green edge is the row worth copying.</p>
+          </div>
+        </article>
+
+        <article class="tile tile--white" data-reveal style="--delay:80ms">
+          <div id="i-1"></div>
+          <div class="tile__words">
+            <h3 class="d3">Find the price band that converts</h3>
+            <p>Grouped at shelf price, so a band is a decision you can act on, not an average.</p>
+          </div>
+        </article>
+
+        <article class="tile tile--white" data-reveal style="--delay:160ms">
+          <div id="i-4"></div>
+          <div class="tile__words">
+            <h3 class="d3">Stop killing products too early</h3>
+            <p>How long a winner took to show itself. Anything younger has not finished its test.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKET RADAR ........................................................ -->
+  <section class="sec" id="radar">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="label">Market radar</span>
+        <h2 class="d2">What competitors sell, and in what order</h2>
+        <p class="lede">
+          Add a domain. Ecomi snapshots that shop's public catalogue every
+          day and tells you what moved overnight.
+        </p>
+      </div>
+
+      <div class="bento" style="--cols:3">
+        <article class="tile span-2" data-reveal>
+          <div class="tile__demo" id="r-movers"></div>
+          <div class="tile__words">
+            <span class="tile__kicker">Overnight</span>
+            <h3 class="d3">New in, and climbing fast</h3>
+            <p>
+              The number on a tile is the place it holds in that shop's own
+              bestseller order. A product that jumped fourteen places last
+              night is a product being pushed today.
+            </p>
+          </div>
+        </article>
+
+        <article class="tile" data-reveal style="--delay:80ms">
+          <div class="tile__demo" id="r-winners"></div>
+          <div class="tile__words">
+            <span class="tile__kicker">Across the set</span>
+            <h3 class="d3">What the whole market agrees on</h3>
+            <p>The products holding a top place in more than one shop at once.</p>
+          </div>
+        </article>
+      </div>
+
+      <p class="muted-note" style="margin-top:var(--space-4);text-align:center" data-reveal>
+        Public catalogue pages only &mdash; no logins, nothing taken from a theme.
+      </p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS ........................................................ -->
+  <section class="sec sec--tint" id="start">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="label">How it works</span>
+        <h2 class="d2">Three connections and a number you can trust</h2>
+      </div>
+
+      <div class="start">
+        <article class="start__card" data-reveal>
+          <span class="step__n">1</span>
+          <h3 class="d4">Connect Shopify</h3>
+          <p>Orders, products and returns come across on their own. No file to upload, no tag to install.</p>
+        </article>
+        <article class="start__card" data-reveal style="--delay:80ms">
+          <span class="step__n">2</span>
+          <h3 class="d4">Connect Google Ads</h3>
+          <p>Read-only. Ecomi reads spend per product and never changes a bid, a budget or a campaign.</p>
+        </article>
+        <article class="start__card" data-reveal style="--delay:160ms">
+          <span class="step__n">3</span>
+          <h3 class="d4">Fill in your cost of goods</h3>
+          <p>Once per product. From then on every figure on every screen is profit, not revenue.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT IT NEVER DOES .................................................. -->
+  <section class="sec">
+    <div class="wrap never">
+      <div data-reveal>
+        <span class="label">What Ecomi never does</span>
+        <h2 class="d2" style="margin-top:var(--space-4);max-width:15ch">Your accounts stay yours</h2>
+        <p class="copy" style="margin-top:var(--space-4)">
+          Ecomi reads. It is a reporting tool, not an automation tool, and
+          everything below is a property of how it is built rather than a
+          setting you have to find.
+        </p>
+      </div>
+
+      <div class="never__list" data-reveal style="--delay:80ms" id="never"></div>
+    </div>
+  </section>
+
+  <!-- QUESTIONS ........................................................... -->
+  <section class="sec sec--tint" id="questions">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="label">Questions</span>
+        <h2 class="d2">The things people ask first</h2>
+      </div>
+
+      <div class="qa" data-reveal>
+        <details>
+          <summary>Who is Ecomi for?</summary>
+          <p>
+            Shopify shops that advertise on Google and import products from
+            suppliers or competitors. If you run a catalogue that changes
+            every week and you cannot tell which parts of it pay for
+            themselves, that is the problem Ecomi was built for.
+          </p>
+        </details>
+
+        <details>
+          <summary>What does Ecomi do with my Google Ads account?</summary>
+          <p>
+            It reads cost, clicks, impressions and conversions, and the
+            status of your Merchant Center listings. The connection is
+            read-only: no bid, budget, campaign or listing is ever created,
+            changed, paused or deleted. You can disconnect it at any time
+            from Settings, or from your Google Account permissions page.
+          </p>
+        </details>
+
+        <details>
+          <summary>Why not just use the Google Ads reports?</summary>
+          <p>
+            Google knows what you spent but not what the goods cost you, and
+            Shopify knows what you sold but not what it cost to sell it.
+            Neither subtracts returns. Ecomi puts both on the same row and
+            takes the cost of goods and the refunds off, which is the first
+            figure that is actually profit.
+          </p>
+        </details>
+
+        <details>
+          <summary>Where does Market radar's data come from?</summary>
+          <p>
+            Public product and collection pages of the shops you choose to
+            follow &mdash; the same pages anyone can open in a browser. Ecomi
+            signs in nowhere, takes nothing from a theme or an admin, and
+            collects no personal data from those shops.
+          </p>
+        </details>
+
+        <details>
+          <summary>Can I run more than one store?</summary>
+          <p>
+            Yes. Stores in different countries and currencies sit under one
+            account and report in one currency, so three shops produce one
+            set of figures rather than three.
+          </p>
+        </details>
+
+        <details>
+          <summary>What does it cost?</summary>
+          <p>
+            Pricing is being finalised. Write to
+            <a href="mailto:support@ecomi.app">support@ecomi.app</a> and we
+            will tell you where it stands.
+          </p>
+        </details>
+
+        <details>
+          <summary>How do I get my data deleted?</summary>
+          <p>
+            Ask at <a href="mailto:support@ecomi.app">support@ecomi.app</a>.
+            Everything belonging to your account is deleted within 30 days of
+            it being closed. The
+            <a href="privacy.html">privacy policy</a> sets out what is kept
+            and for how long.
+          </p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="close__in" data-reveal>
+        <h2 class="d2">Start the week knowing</h2>
+        <p class="lede">Connect once. Ecomi keeps the figures current from then on.</p>
+        <a class="btn btn--onInk btn--xl btn--round" href="https://app.ecomi.app/login">Sign in to Ecomi</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="site-foot__grid">
+      <div class="site-foot__about">
+        <a class="brand" href="/">
+          <span class="brand__mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/></svg></span>
+          <span>Ecomi</span>
+        </a>
+        <p>
+          Profit reporting and product sourcing for Shopify shops that
+          advertise on Google.
+        </p>
+      </div>
+
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#products">Products</a></li>
+          <li><a href="#insights">Insights</a></li>
+          <li><a href="#radar">Market radar</a></li>
+          <li><a href="#start">How it works</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:support@ecomi.app">support@ecomi.app</a></li>
+          <li><a href="https://app.ecomi.app/login">Sign in</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-foot__base">
+      <span>&copy; 2026 Ecomi. Registered in the Netherlands.</span>
+      <span>Shopify and Google are trademarks of their respective owners.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="line-chart.js"></script>
+<script src="screens.js"></script>
+<script src="parts.js"></script>
+<script src="motion.js"></script>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+
+  $("strip").innerHTML = Parts.strip();
+
+  $("hero-shot").innerHTML = Parts.dash({
+    scale: ".74",
+    h: "27rem",
+    note: "<b>Emma Lovett</b><span>&middot;</span><span>one of three shops on this account</span>"
+  });
+
+  $("p-table").innerHTML = Parts.products({
+    path: false, scale: ".64", h: "15rem", rows: 6, fadeX: true
+  });
+  $("p-rows").innerHTML = Parts.products({
+    path: false, scale: ".7", h: "15rem", rows: 4, fadeX: true
+  });
+
+  /* One height for all three, so the three sentences below them start on
+     the same line. */
+  $("i-0").innerHTML = Parts.panelPiece(0, { h: "19rem" });
+  $("i-1").innerHTML = Parts.panelPiece(1, { h: "19rem" });
+  $("i-4").innerHTML = Parts.panelPiece(4, { h: "19rem" });
+
+  $("r-movers").innerHTML = Parts.radar({
+    path: false, scale: ".66", h: "15rem", movers: 4
+  });
+  $("r-winners").innerHTML = Parts.piece(Screens.winners(Screens.WINNERS),
+    { scale: ".9", h: "15rem" });
+
+  var never = [
+    ["No changes to your ad account",
+     "The Google connection is read-only. Ecomi cannot create, pause, edit or delete a campaign, a budget or a bid, and it never tries."],
+    ["No selling or sharing of your data",
+     "Nothing read from Google or Shopify is sold, rented or passed to a third party, and no customer's data is ever mixed with another's."],
+    ["No AI trained on your figures",
+     "Your spend, orders, revenue and customers are never sent to an AI model. The model only sees product titles and colour names you ask it to write or translate."],
+    ["No trackers on this site",
+     "No advertising network, no analytics tag, no cookie banner, because there is nothing here to consent to. Signing in sets one session cookie and that is all."]
+  ];
+
+  $("never").innerHTML = never.map(function (n) {
+    return '<div class="never__row"><span class="never__mark">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" ' +
+      'stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</span><div><h3>' + n[0] + "</h3><p>" + n[1] + "</p></div></div>";
+  }).join("");
+
+  Motion.start();
+})();
+</script>
+</body>
+</html>

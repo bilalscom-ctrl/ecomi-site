@@ -1,0 +1,192 @@
+/* ==========================================================================
+   tokens.css — the single source of truth for every visual decision.
+   Nothing below this file may contain a raw hex value or a magic number.
+   ========================================================================== */
+
+:root {
+  /* ---- Neutral ramp -----------------------------------------------------
+     Pure achromatic (0% saturation). Fine-grained on purpose: a UI this
+     dense needs half-steps to separate a row border from a card border. */
+  --gray-50:  hsl(0 0% 98%);
+  --gray-75:  hsl(0 0% 96%);
+  --gray-100: hsl(0 0% 93%);
+  --gray-150: hsl(0 0% 89%);
+  --gray-200: hsl(0 0% 85%);
+  --gray-300: hsl(0 0% 76%);
+  --gray-400: hsl(0 0% 64%);
+  --gray-500: hsl(0 0% 55%);
+  --gray-600: hsl(0 0% 46%);
+  --gray-700: hsl(0 0% 36%);
+  --gray-800: hsl(0 0% 27%);
+  --gray-900: hsl(0 0% 18%);
+  --gray-950: hsl(0 0% 9%);
+
+  /* Alpha neutrals — for borders that sit on top of a tinted surface and
+     must not look like a lighter opaque bar. */
+  --alpha-50:  hsl(0 0% 0% / .03);
+  --alpha-100: hsl(0 0% 0% / .06);
+  --alpha-150: hsl(0 0% 0% / .09);
+  --alpha-200: hsl(0 0% 0% / .12);
+  --alpha-300: hsl(0 0% 0% / .18);
+
+  /* ---- Semantic surfaces ---- */
+  --surface:         hsl(0 0% 100%);
+  --surface-sunken:  var(--gray-50);
+  --surface-hover:   var(--gray-75);
+  --surface-active:  var(--gray-100);
+  --surface-inverse: var(--gray-950);
+
+  --border-subtle: var(--alpha-100);
+  --border:        var(--alpha-150);
+  --border-strong: var(--gray-200);
+
+  --text-primary:   var(--gray-950);
+  --text-secondary: var(--gray-600);
+  --text-tertiary:  var(--gray-500);
+  --text-inverse:   hsl(0 0% 100%);
+
+  /* ---- The dark column ----
+     Named here and not in a second :root, which is the thing to avoid: two
+     roots means two places to change a colour and one of them is always the
+     one you forget. These are the palette for the sidebar; the sidebar
+     itself then redefines the semantic tokens above in terms of them, so
+     every rule in the app keeps asking for --text-secondary and simply
+     gets a different answer inside that column. */
+  --ink-900: #0A0A0A;   /* the column */
+  --ink-800: #141414;   /* the head and the floating plate */
+  --ink-700: #1C1C1C;   /* the row you are on, the search field */
+  --ink-600: #262626;
+  --ink-text:      #DCDCDC;   /* nav labels: 14.4:1 on --ink-900 */
+  --ink-text-dim:  #8E8E8E;   /* group labels and resting icons: 6.0:1 */
+  --ink-text-loud: #FFFFFF;   /* the page you are on */
+
+  /* ---- Status ramps ----
+     Taken from the reference product. Brighter than a hand-mixed set, and
+     specifically built to stay legible at eight pixels tall, which is what a
+     share bar is. */
+  --green-50:  hsl(138 76% 97%);
+  --green-100: hsl(141 84% 93%);
+  --green-500: hsl(142 71% 45%);
+  --green-600: hsl(142 76% 36%);
+  --red-50:    hsl(0 86% 97%);
+  --red-100:   hsl(0 93% 94%);
+  --red-500:   hsl(0 84% 60%);
+  --red-600:   hsl(0 72% 51%);
+  --amber-50:  hsl(48 100% 96%);
+  --amber-100: hsl(48 96% 89%);
+  --amber-500: hsl(38 92% 50%);
+  --amber-600: hsl(32 95% 44%);
+  --blue-50:   hsl(214 100% 97%);
+  --blue-100:  hsl(214 95% 93%);
+  --blue-500:  hsl(217 91% 60%);
+  --blue-600:  hsl(221 83% 53%);
+
+  /* ---- Status ---- */
+  --positive:      hsl(160 84% 27%);
+  --positive-soft: hsl(160 60% 96%);
+  --negative:      hsl(4 74% 46%);
+  --negative-soft: hsl(4 90% 97%);
+  --warning:       hsl(32 90% 40%);
+  --warning-soft:  hsl(38 92% 95%);
+  --info:          hsl(222 84% 52%);
+  --info-soft:     hsl(222 90% 97%);
+
+  /* Brand accent. Used where the product signs its own name: the account
+     avatar today, and nothing that carries meaning in a chart. */
+  --accent:      #fd4b92;
+  --accent-hover: #f93583;
+
+  /* ---- Data series ----
+     Fixed meaning across every chart in the product: a colour always means
+     the same metric, so the legend becomes learnable. */
+  --series-revenue:  hsl(258 82% 62%);
+  --series-adspend:  hsl(222 84% 56%);
+  --series-cogs:     hsl(32 92% 50%);
+  --series-returns:  hsl(4 84% 58%);
+  --series-profit:   hsl(160 72% 40%);
+
+  /* ---- Type ----
+     One family. Size in rem so the whole UI scales with the user's browser
+     setting; line-height unitless so it inherits proportionally. */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "SFMono-Regular", ui-monospace, Menlo, Consolas, monospace;
+
+  --text-2xs: 0.6875rem; /* 11px — table meta, chips */
+  --text-xs:  0.75rem;   /* 12px — labels, secondary rows */
+  --text-sm:  0.8125rem; /* 13px — the workhorse: nav, tables, buttons */
+  --text-md:  0.875rem;  /* 14px — body copy, inputs */
+  --text-lg:  1rem;      /* 16px — card titles */
+  --text-xl:  1.125rem;  /* 18px — page titles */
+  --text-2xl: 1.375rem;  /* 22px — auth headings */
+  --text-3xl: 1.75rem;   /* 28px — KPI values */
+
+  --leading-tight: 1.2;
+  --leading-snug:  1.4;
+  --leading-normal: 1.55;
+
+  --tracking-tight: -0.02em;
+  --tracking-snug:  -0.01em;
+
+  /* ---- Spacing ----
+     4px base. Every gap in the product is a multiple; nothing is eyeballed. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ---- Radii ---- */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  /* Buttons, nav items and every other interactive control share one radius.
+     Slightly rounder than the panels they sit in, which is what makes them
+     read as pressable rather than as part of the surface. */
+  --radius-control: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+
+  /* ---- Elevation ----
+     Ring-first, shadow-second. A 1px inner ring reads crisper at 100% zoom
+     than a blurred drop shadow, which is why every modern console does it. */
+  --shadow-xs: 0 1px 2px hsl(0 0% 0% / .04);
+  /* A sub-pixel edge at high opacity plus a soft drop. The edge reads as a
+     hairline border at any zoom, which a 1px ring at low opacity does not. */
+  /* Their standard, and the one used everywhere: a 1px ring at 6% black plus
+   two short falloffs. Softer than a single dark hairline, and it does not go
+   grey when it sits on a tinted surface. */
+  --shadow-sm: 0 0 1.072px hsl(0 0% 0% / .4), 0 2px 4px hsl(0 0% 0% / .04);
+  /* Layered falloff for panels that need to feel lifted rather than outlined. */
+  --shadow-natural: 0 0 0 1px hsl(0 0% 0% / .06),
+                    0 1px 1px -0.5px hsl(0 0% 0% / .06),
+                    0 3px 3px -1.5px hsl(0 0% 0% / .06);
+  --shadow-md: 0 0 1.072px hsl(0 0% 0% / .4), 0 4px 12px hsl(0 0% 0% / .07);
+  --shadow-lg: 0 0 1.072px hsl(0 0% 0% / .35), 0 12px 32px hsl(0 0% 0% / .12);
+
+  /* ---- Motion ---- */
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  /* Used for size changes the eye follows across the screen, like folding
+     the sidebar: it starts and ends slowly, so nothing appears to snap. */
+  --ease-soft: cubic-bezier(0.32, 0.72, 0, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
+
+  /* ---- Layout ---- */
+  --sidebar-width: 15.5rem;
+  --sidebar-width-collapsed: 3.5rem;
+  --topbar-height: 3.25rem;
+  --content-max: 82rem;
+
+  --z-sticky: 20;
+  --z-popover: 60;
+  --z-overlay: 80;
+  --z-modal: 90;
+}

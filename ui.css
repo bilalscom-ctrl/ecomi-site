@@ -1,0 +1,1161 @@
+/* ==========================================================================
+   ui.css — the site layer.
+
+   Everything here is for the website only. It adds what a marketing page
+   needs and the product does not: display type, full-width sections, and a
+   frame that crops a real app screen down to the size of the paragraph
+   beside it.
+
+   It introduces no new colour. Every value below resolves to a token in
+   tokens.css, which is the app's own file, unchanged.
+
+   The one rule the whole file is built around: a demo is never taller than
+   about 1.5x the text it belongs to, and the two always touch.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Base
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--site-text);
+  line-height: var(--leading-normal);
+  font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: var(--blue-100);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. The site type scale
+
+   The product tops out at 28px because its largest text is a KPI value. A
+   homepage needs a display range above that. Same family, same weights, same
+   tracking idea — tighter as the size grows, which is the only way Inter
+   stays optically even from 13px to 64px.
+   -------------------------------------------------------------------------- */
+:root {
+  --site-text: 1rem;
+
+  --d1: clamp(2.625rem, 5.6vw, 4.25rem);
+  --d2: clamp(1.875rem, 3.6vw, 2.75rem);
+  --d3: clamp(1.25rem, 1.8vw, 1.4375rem);
+  --d4: 1.0625rem;
+
+  --lede: clamp(1.0625rem, 1.3vw, 1.1875rem);
+  --body: 0.9375rem;
+
+  --tracking-display: -0.035em;
+  --tracking-head: -0.028em;
+
+  --wrap: 72rem;
+  --wrap-narrow: 58rem;
+  --topbar: 4rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+
+.d1 {
+  font-size: var(--d1);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
+
+.d2 {
+  font-size: var(--d2);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-head);
+  text-wrap: balance;
+}
+
+.d3 {
+  font-size: var(--d3);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: var(--tracking-head);
+}
+
+.d4 {
+  font-size: var(--d4);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-tight);
+}
+
+.lede {
+  font-size: var(--lede);
+  line-height: 1.5;
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-secondary);
+  max-width: 44ch;
+}
+
+.copy {
+  font-size: var(--body);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 54ch;
+}
+
+.copy strong {
+  color: var(--text-primary);
+  font-weight: 550;
+}
+
+.muted-note {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  letter-spacing: var(--tracking-snug);
+}
+
+/* The bracketed label, borrowed from the kind of page that has to say what
+   a section is before it says anything else. Mono, so it never competes
+   with the heading two lines below it. */
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.label::before {
+  content: "[";
+  color: var(--border-strong);
+}
+
+.label::after {
+  content: "]";
+  color: var(--border-strong);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 1.75rem;
+  padding: 0 var(--space-3) 0 var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-secondary);
+}
+
+.chip b {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.chip__dot {
+  width: .4375rem;
+  height: .4375rem;
+  border-radius: var(--radius-full);
+  background: var(--series-profit);
+}
+
+/* --------------------------------------------------------------------------
+   3. Layout
+   -------------------------------------------------------------------------- */
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+.wrap--narrow {
+  max-width: var(--wrap-narrow);
+}
+
+.sec {
+  padding-block: clamp(var(--space-12), 7vw, 5.5rem);
+}
+
+.sec--tint {
+  background: var(--surface-sunken);
+}
+
+.sec--ink {
+  background: var(--ink-900);
+  color: var(--ink-text);
+}
+
+.sec--ink .d1,
+.sec--ink .d2,
+.sec--ink .d3 {
+  color: var(--ink-text-loud);
+}
+
+.sec--ink .lede,
+.sec--ink .copy {
+  color: var(--ink-text-dim);
+}
+
+.sec--ink .label {
+  color: var(--ink-text-dim);
+}
+
+.sec--ink .label::before,
+.sec--ink .label::after {
+  color: var(--ink-600);
+}
+
+.rule {
+  height: 1px;
+  background: var(--border-subtle);
+  border: 0;
+  margin: 0;
+}
+
+/* The centred opening of a section: label, heading, one paragraph. Nothing
+   else is allowed here — a section that needs more than this to be
+   understood is a section that needs a better heading. */
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  text-align: center;
+  margin-bottom: clamp(var(--space-8), 4vw, var(--space-12));
+}
+
+.head .d2 {
+  max-width: 18ch;
+}
+
+.head .lede {
+  max-width: 50ch;
+}
+
+.head--left {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.head--left .d2,
+.head--left .lede {
+  max-width: 34ch;
+}
+
+/* --------------------------------------------------------------------------
+   4. Topbar
+   -------------------------------------------------------------------------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  height: var(--topbar);
+  background: hsl(0 0% 100% / .72);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  transition: box-shadow var(--duration-base) var(--ease-out),
+              background var(--duration-base) var(--ease-out);
+}
+
+.topbar.is-stuck {
+  box-shadow: 0 1px 0 var(--border-subtle);
+}
+
+.topbar__in {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  height: 100%;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.brand__mark {
+  display: grid;
+  place-items: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: var(--radius-lg);
+  background: var(--gray-950);
+  color: var(--text-inverse);
+}
+
+.brand__mark svg {
+  width: .875rem;
+  height: .875rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.nav a {
+  position: relative;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-control);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-secondary);
+  transition: color var(--duration-fast) var(--ease-out),
+              background var(--duration-fast) var(--ease-out);
+}
+
+.nav a:hover {
+  color: var(--text-primary);
+  background: var(--alpha-50);
+}
+
+.nav a[aria-current] {
+  color: var(--text-primary);
+}
+
+.nav a[aria-current]::after {
+  content: "";
+  position: absolute;
+  left: var(--space-3);
+  right: var(--space-3);
+  bottom: .25rem;
+  height: 1.5px;
+  border-radius: var(--radius-full);
+  background: var(--text-primary);
+}
+
+@media (max-width: 54rem) {
+  .nav {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Buttons — the app's .btn, plus the two sizes a homepage needs
+   -------------------------------------------------------------------------- */
+.btn--round {
+  border-radius: var(--radius-full);
+}
+
+.btn--xl {
+  height: 3rem;
+  padding: 0 var(--space-6);
+  font-size: var(--text-lg);
+  font-weight: 550;
+}
+
+.btn--primary.btn--xl {
+  box-shadow: 0 1px 2px hsl(0 0% 0% / .12), 0 8px 20px -8px hsl(0 0% 0% / .45);
+}
+
+.btn--primary.btn--xl:hover {
+  box-shadow: 0 1px 2px hsl(0 0% 0% / .12), 0 10px 26px -8px hsl(0 0% 0% / .5);
+  transform: translateY(-1px);
+}
+
+.btn--onInk {
+  background: var(--surface);
+  color: var(--gray-950);
+}
+
+.btn--onInk:hover {
+  background: var(--gray-100);
+}
+
+.btn--xl svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.acts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.acts--centre {
+  justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   6. The shot — a real app screen, cropped to the size of its paragraph
+
+   The markup inside is the product's own. It is not redrawn and not
+   simplified; it is scaled and clipped, the way a photograph is cropped.
+   --shot-scale sets how much of the app's own pixel grid fits across the
+   frame; --shot-h fixes the height so the crop lines up with the text.
+   -------------------------------------------------------------------------- */
+.shot {
+  position: relative;
+  overflow: hidden;
+  color: var(--text-primary);
+  border-radius: var(--radius-2xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.shot--flat {
+  box-shadow: var(--shadow-natural);
+}
+
+.shot__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 2.25rem;
+  padding-inline: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface);
+}
+
+.shot__dots {
+  display: inline-flex;
+  gap: .3125rem;
+}
+
+.shot__dots i {
+  width: .4375rem;
+  height: .4375rem;
+  border-radius: var(--radius-full);
+  background: var(--gray-200);
+}
+
+.shot__path {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--text-tertiary);
+  letter-spacing: .02em;
+}
+
+.shot__stage {
+  --fade-to: var(--surface-sunken);
+  position: relative;
+  height: var(--shot-h, 20rem);
+  overflow: hidden;
+  background: var(--surface-sunken);
+}
+
+.shot__canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% / var(--shot-scale, 1));
+  padding: var(--space-4);
+  transform: scale(var(--shot-scale, 1)) translate(var(--shot-x, 0), var(--shot-y, 0));
+  transform-origin: top left;
+  transition: transform 720ms var(--ease-soft);
+}
+
+.shot__canvas--tight {
+  padding: 0;
+}
+
+/* The crop is deliberate, so it is allowed to look it. */
+.shot__stage[data-fade="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4.5rem;
+  background: linear-gradient(to bottom, transparent, var(--fade-to));
+  pointer-events: none;
+}
+
+/* A screen cropped sideways says so on its right edge, the same way it says
+   so along the bottom. */
+.shot__stage[data-fade-x="true"]::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 5rem;
+  z-index: 1;
+  background: linear-gradient(to right, transparent, var(--fade-to));
+  pointer-events: none;
+}
+
+/* A caption that belongs to the shot sits inside its frame, not a screen
+   away from it. */
+.shot__note {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.shot__note b {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* A single piece of the product, lifted out and set at its true size. */
+.piece {
+  color: var(--text-primary);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.piece .shot__stage {
+  --fade-to: var(--surface);
+  background: var(--surface);
+}
+
+/* --------------------------------------------------------------------------
+   7. Tiles — demo and words in one card, which is the whole point
+   -------------------------------------------------------------------------- */
+.bento {
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+}
+
+@media (max-width: 68rem) {
+  .bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 46rem) {
+  .bento {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.span-2 {
+  grid-column: span 2;
+}
+
+@media (max-width: 46rem) {
+  .span-2 {
+    grid-column: auto;
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-2xl);
+  background: var(--blue-50);
+  transition: transform var(--duration-slow) var(--ease-soft),
+              box-shadow var(--duration-slow) var(--ease-soft);
+}
+
+.tile--plain {
+  background: var(--surface-sunken);
+}
+
+.tile--white {
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.tile:hover {
+  transform: translateY(-3px);
+}
+
+.tile__demo {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow-natural);
+}
+
+.tile__words {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.tile__words p {
+  font-size: var(--body);
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.tile__kicker {
+  font-size: var(--text-2xs);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* --------------------------------------------------------------------------
+   8. The rail — three short columns under a shot, one of them live
+   -------------------------------------------------------------------------- */
+.rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+@media (max-width: 60rem) {
+  .rail {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+}
+
+.rail__item {
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--border-subtle);
+  opacity: .45;
+  transition: opacity var(--duration-slow) var(--ease-out),
+              border-color var(--duration-slow) var(--ease-out);
+  cursor: pointer;
+}
+
+.rail__item.is-live {
+  opacity: 1;
+  border-left-color: var(--gray-950);
+}
+
+.rail__item h3 {
+  font-size: var(--d4);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+}
+
+.rail__item p {
+  margin-top: var(--space-2);
+  font-size: var(--body);
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   9. Ticks
+   -------------------------------------------------------------------------- */
+.ticks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  list-style: none;
+  padding: 0;
+}
+
+/* The mark is taken out of the flow so the bold lead-in and the sentence
+   after it stay one line of text rather than two columns. */
+.ticks li {
+  position: relative;
+  padding-left: 1.875rem;
+  font-size: var(--body);
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.ticks b {
+  color: var(--text-primary);
+  font-weight: 550;
+}
+
+.ticks__mark {
+  position: absolute;
+  left: 0;
+  top: .1875rem;
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--positive-soft);
+  color: var(--positive);
+}
+
+.ticks__mark svg {
+  width: .75rem;
+  height: .75rem;
+}
+
+/* --------------------------------------------------------------------------
+   10. Steps
+   -------------------------------------------------------------------------- */
+.step__n {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-full);
+  background: var(--gray-950);
+  color: var(--text-inverse);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------------------
+   11. Strip and footer
+   -------------------------------------------------------------------------- */
+.strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3) var(--space-6);
+  padding-block: var(--space-6);
+  border-block: 1px solid var(--border-subtle);
+}
+
+.strip span {
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-tertiary);
+}
+
+.strip b {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.foot {
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.foot__in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+.foot__links {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.foot__links a:hover {
+  color: var(--text-primary);
+}
+
+/* --------------------------------------------------------------------------
+   12. Motion
+
+   Three things move: a block arrives when it is first seen, a number counts
+   to its value, and a chart line draws itself. Nothing loops, nothing moves
+   while it is being read.
+   -------------------------------------------------------------------------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 620ms var(--ease-soft),
+              transform 620ms var(--ease-soft);
+  transition-delay: var(--delay, 0ms);
+}
+
+[data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.chart path[data-draw] {
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+}
+
+.chart path[data-draw].is-drawn {
+  transition: stroke-dashoffset 1400ms var(--ease-out);
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .chart path[data-draw] {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+  }
+}
+
+/* The small heading a screen carries inside a frame. */
+.screen-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+
+/* A column is as wide as the layout says, never as wide as a table inside
+   it wants to be. */
+.bento > *,
+.rail > *,
+.stick > *,
+.pair > *,
+.step > *,
+.hero__grid > *,
+.flow > * {
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   13. Long prose — the privacy policy and the terms
+
+   One column, one measure, and headings that are easy to scan down. A
+   reviewer and a customer read the same page; neither should have to work
+   for it.
+   -------------------------------------------------------------------------- */
+.doc {
+  max-width: 44rem;
+  margin-inline: auto;
+  padding-block: clamp(var(--space-10), 6vw, 4.5rem) clamp(var(--space-12), 7vw, 5rem);
+}
+
+.doc__kicker {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.doc h1 {
+  margin-top: var(--space-4);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: var(--tracking-display);
+}
+
+.doc__meta {
+  margin-top: var(--space-4);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--text-tertiary);
+}
+
+.doc__meta strong {
+  color: var(--text-secondary);
+  font-weight: 550;
+}
+
+.doc h2 {
+  margin-top: var(--space-10);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-head);
+}
+
+.doc h3 {
+  margin-top: var(--space-6);
+  font-size: var(--text-md);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+}
+
+.doc p,
+.doc li {
+  font-size: var(--text-md);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.doc p {
+  margin-top: var(--space-4);
+}
+
+.doc ul,
+.doc ol {
+  margin-top: var(--space-4);
+  padding-left: var(--space-5);
+}
+
+.doc li + li {
+  margin-top: var(--space-2);
+}
+
+.doc strong {
+  color: var(--text-primary);
+  font-weight: 550;
+}
+
+.doc a {
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: .2em;
+  text-decoration-color: var(--border-strong);
+}
+
+.doc a:hover {
+  text-decoration-color: var(--text-primary);
+}
+
+.doc table {
+  width: 100%;
+  margin-top: var(--space-5);
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.doc th {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-default);
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: var(--tracking-snug);
+  color: var(--text-primary);
+}
+
+.doc td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+
+.doc td:first-child {
+  font-weight: 550;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+/* The paragraphs a reviewer is looking for, marked so they are found. */
+.callout {
+  margin-top: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border-left: 2px solid var(--gray-950);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  background: var(--surface-sunken);
+}
+
+.callout p:first-child {
+  margin-top: 0;
+}
+
+/* --------------------------------------------------------------------------
+   14. Questions
+   -------------------------------------------------------------------------- */
+.qa {
+  max-width: 48rem;
+  margin-inline: auto;
+}
+
+.qa details {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.qa details:first-of-type {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.qa summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) 0;
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--d4);
+  font-weight: 600;
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-primary);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.qa summary::-webkit-details-marker {
+  display: none;
+}
+
+.qa summary:hover {
+  color: var(--text-secondary);
+}
+
+.qa summary::after {
+  content: "";
+  flex: none;
+  width: .625rem;
+  height: .625rem;
+  margin-right: var(--space-1);
+  border-right: 1.5px solid var(--text-tertiary);
+  border-bottom: 1.5px solid var(--text-tertiary);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.qa details[open] summary::after {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+
+.qa details p {
+  margin: 0;
+  padding: 0 var(--space-8) var(--space-5) 0;
+  font-size: var(--body);
+  line-height: 1.65;
+  color: var(--text-secondary);
+  max-width: 62ch;
+}
+
+/* --------------------------------------------------------------------------
+   15. The full footer
+   -------------------------------------------------------------------------- */
+.site-foot {
+  padding-block: clamp(var(--space-10), 5vw, var(--space-12)) var(--space-8);
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface-sunken);
+}
+
+.site-foot__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(0, 1fr));
+  gap: var(--space-8) var(--space-6);
+}
+
+@media (max-width: 54rem) {
+  .site-foot__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.site-foot h4 {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.site-foot ul {
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-foot li + li {
+  margin-top: var(--space-2);
+}
+
+.site-foot a {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.site-foot a:hover {
+  color: var(--text-primary);
+}
+
+.site-foot__about p {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 34ch;
+}
+
+.site-foot__base {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: clamp(var(--space-8), 4vw, var(--space-10));
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+}
+
+/* Keyboard users land here first. */
+.skip {
+  position: absolute;
+  left: var(--space-4);
+  top: var(--space-4);
+  z-index: var(--z-max);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-control);
+  background: var(--gray-950);
+  color: var(--text-inverse);
+  font-size: var(--text-sm);
+  transform: translateY(-200%);
+}
+
+.skip:focus {
+  transform: none;
+}
